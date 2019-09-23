@@ -5,7 +5,7 @@ Check how many IPs are used within an iprange
 
 How to execute:
 
-# check_fping.sh -n <xxx.xxx.xxx.xxx/xx> [ -w|--warning <number>% -c|--critical <number>% -l|--lower <number> -u|--upper <number>]
+check_fping.sh -n <xxx.xxx.xxx.xxx/xx> [ -w|--warning <number>% -c|--critical <number>% -l|--lower <number> -u|--upper <number>]
 
 Where xxx.xxx.xxx.xxx it the network address, xx is the prefixlen
 The current status is OK, as long as one system responds
