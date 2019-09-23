@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 usage() {
   echo "$0 -n <xxx.xxx.xxx.xxx/xx> [ -w|--warning <number>% -c|--critical <number>% -l|--lower <number> -u|--upper <number>]"
@@ -59,14 +58,13 @@ if [ ! "$LOWER" ] ;  then LOWER=0; fi
 if [ ! "$UPPER" ] ;  then UPPER=0; fi
 if [ ! "$WARNING" ] ;  then WARNING=100; else WARN=`echo ${WARNING} | tr -d '%'` ; fi
 if [ ! "$CRITICAL" ] ;  then CRITICAL=100; else CRIT=`echo ${CRITICAL} | tr -d '%'` ;fi
-echo ${CRIT}
-echo ${WARN}
 
 ######################################################################
 #
 # GLOBAL FUNCTIONS
 #
 ######################################################################
+
 longout_append () {
         RET=$?
         LONGOUTPUT="$LONGOUTPUT$@\n"
@@ -75,7 +73,7 @@ longout_append () {
 
 statusline_append () {
     if [ -z "${STATUSLINE}" ] ; then
-        STATUSLINE=":"
+        STATUSLINE=": "
     else
         DELIMITER=" - "
     fi
@@ -119,12 +117,12 @@ echo "Total number of IP: $total"
 echo  "Number of IP online on ${NETWORK}: $Alive"
 echo "Number of IP offline ${NETWORK}: $Unreach"
 
-# No floating point in shell
+# No floating point in shell 
 # percent_unreach=`bc <<< "scale=2; 100*$Unreach/$total"`
 percent_unreach=$((100*$Unreach/$total + 200*$Unreach/$total % 2))
 
 
-# No floating point in shell
+# No floating point in shell 
 # percent_alive=`bc <<< "scale=2; 100*$Alive/$total"`
 percent_alive=$((100*$Alive/$total + 200*$Alive/$total % 2))
 
@@ -137,20 +135,20 @@ PERFDATA="|'iprange_usage_percent'=${percent_alive}%;${WARN}%;${CRIT}%;0%;100% '
 rm $TEMPFILEHOSTID
 if [ $Alive -ge "1" ]; then
   if [ ${percent_alive} -gt ${CRIT} ]
-    then
-    longout_append "The usage of ${NETWORK} ip range reached the CRITICAL level!"
-    set_exit_state 2
+    then    
+    # longout_append "The usage of ${NETWORK} ip range reached the CRITICAL level!"
+    set_exit_state 2 "Amount of IPs"
   elif [ ${percent_alive} -gt ${WARN} ]
-    then
-    longout_append "The usage of ${NETWORK} ip range reached the WARNING level!"
-    set_exit_state 1
+    then    
+    # longout_append "The usage of ${NETWORK} ip range reached the WARNING level!"
+    set_exit_state 1 "Amount of IPs"
   else
-    longout_append "The usage of ${NETWORK} ip range is GOOD and Active!"
-    set_exit_state 0
+    # longout_append "The usage of ${NETWORK} ip range is GOOD and Active!"
+    set_exit_state 0 "Everything"
   fi
 else
-  longout_append "No host available for the ${NETWORK} ip range!"
-  set_exit_state 2
+  # longout_append "No host available for the ${NETWORK} ip range!"
+  set_exit_state 2 "No Hosts in ${NETWORK}"
 fi
 
 exit_plugin
